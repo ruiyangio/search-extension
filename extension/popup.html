@@ -2,15 +2,29 @@
 <html>
   <head>
     <style>
-      button {
-        height: 30px;
-        width: 30px;
-        outline: none;
+      .ext-main {
+        width: 160px;
+      }
+      
+      .ext-btn {
+        background-color: #03A9F4;
+        color: #ffffff;
+        box-shadow: 0 1px 3px #f6f6f6;
+        padding: 5px 5px;
+        border: none;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-left: 15px;
       }
     </style>
   </head>
   <body>
-    <button id="changeColor"></button>
+    <div class="ext-main">
+        <button id="getToken" class="ext-btn">Auth</button>
+        <button id="attachScript" class="ext-btn">Attach</button>
+    </div>
     <script src="popup.js"></script>
   </body>
 </html>

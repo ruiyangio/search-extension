@@ -9,7 +9,6 @@
       "https://www.googleapis.com/auth/drive"
     ]
   },
-  "options_page": "options.html",
   "background": {
     "scripts": ["background.js"],
     "persistent": false
