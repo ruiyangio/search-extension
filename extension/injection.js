@@ -32,7 +32,7 @@ function attach() {
 
 function makeFileBlock(file) {
     return `
-    <div style="float: left; margin-right: 10px; border: 1px solid #CCCCCC; padding: 10px;">
+    <div style="float: left; margin-right: 10px; border: 1px solid #CCCCCC; padding: 10px; box-shadow: 0 0 1px #CCCCCC;">
         <div style="margin-left: auto; margin-right: auto; display: table; margin-bottom: 10px;">
             <img style="width: 60px; height: 45px" src="${file.thumbnailLink}" alt="Preview">
         </div>
