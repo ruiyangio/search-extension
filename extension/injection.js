@@ -32,13 +32,13 @@ function makeFileBlock(file) {
     return `
     <div style="float: left; margin-right: 10px; border: 1px solid #CCCCCC; padding: 10px; box-shadow: 0 0 1px #CCCCCC;">
         <div style="margin-left: auto; margin-right: auto; display: table; margin-bottom: 10px;">
-            <a href="${file.webViewLink}">
+            <a href="${file.webViewLink}" target="_Blank">
                 <img style="width: 60px; height: 45px" src="${file.thumbnailLink}" alt="Preview">
             </a>
         </div>
         <div>
             <img style="display: block; float: left; margin-top: 3px; margin-right: 6px;" src="${file.iconLink}" alt="Icon">
-            <a href="${file.webViewLink}">${file.name}</a>
+            <a style="display: inline-block; text-overflow: ellipsis; width: 40px; overflow: hidden;" href="${file.webViewLink}" target="_Blank">${file.name}</a>
         </div>
     </div>
     `;
@@ -68,7 +68,7 @@ function searchHandler(e) {
             <div id="drive_results" style="padding-bottom: 100px;">
                 <div style="margin-bottom: 15px;">
                     <span>Search results from:</span>
-                    <a href="https://drive.google.com/drive">Google Drive</a>
+                    <a href="https://drive.google.com/drive" target="_Blank">Google Drive</a>
                 </div>
                 ${inner}
             </div>`;
