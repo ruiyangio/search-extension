@@ -15,6 +15,7 @@ function makeRequest(query, callback) {
         })
         .catch(error => {
             console.log('Search extension has encountered an error');
+            console.log(error);
         });
     });
 }
@@ -37,14 +38,21 @@ function makeFileBlock(file) {
             </a>
         </div>
         <div>
-            <img style="display: block; float: left; margin-top: 3px; margin-right: 6px;" src="${file.iconLink}" alt="Icon">
-            <a style="display: inline-block; text-overflow: ellipsis; width: 40px; overflow: hidden;" href="${file.webViewLink}" target="_Blank">${file.name}</a>
+            <img
+                style="display: block; float: left; margin-top: 3px; margin-right: 6px;"
+                src="${file.iconLink}"
+                alt="Icon"
+            >
+            <a
+                style="display: inline-block; text-overflow: ellipsis; max-width: 40px; overflow: hidden; white-space: nowrap;"
+                href="${file.webViewLink}"
+                target="_Blank">${file.name}</a>
         </div>
     </div>
     `;
 }
 
-function searchHandler(e) {
+function searchHandler() {
     const driveDom = document.getElementById('drive_results');
     if (driveDom) {
         driveDom.remove();
@@ -67,7 +75,7 @@ function searchHandler(e) {
             const cardTemplate = `
             <div id="drive_results" style="padding-bottom: 100px;">
                 <div style="margin-bottom: 15px;">
-                    <span>Search results from:</span>
+                    <span>Results from:</span>
                     <a href="https://drive.google.com/drive" target="_Blank">Google Drive</a>
                 </div>
                 ${inner}
