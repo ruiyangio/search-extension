@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           chrome.identity.removeCachedAuthToken({token: cachedToken}, () => {
             chrome.identity.getAuthToken({'interactive': true}, token => {
               chrome.storage.local.set({'access_token_key': token}, () => {
-                console.log('New Token is saved to local storage');
+                console.log(`New Token is saved to local storage ${token}`);
                 sendResponse({farewell: 'gotToken'});
               });
             });
@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         else {
           chrome.identity.getAuthToken({ 'interactive': true }, token => {
             chrome.storage.local.set({'access_token_key': token}, () => {
-              console.log('Token is saved to local storage');
+              console.log(`Token is saved to local storage ${token}`);
               sendResponse({farewell: 'gotToken'});
             });
           });
