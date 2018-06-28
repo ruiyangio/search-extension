@@ -13,6 +13,13 @@
     "scripts": ["background.js"],
     "persistent": false
   },
+  "content_scripts": [
+    {
+      "matches": ["https://microsoft.sharepoint.com/_layouts/15/sharepoint.aspx*"],
+      "run_at": "document_idle",
+      "js": ["injection.js"]
+    }
+  ],
   "page_action": {
     "default_popup": "popup.html",
     "default_icon": {

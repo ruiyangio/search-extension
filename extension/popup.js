@@ -5,7 +5,7 @@ const attachScript = document.getElementById('attachScript');
 
 getToken.onclick = function(element) {
   chrome.runtime.sendMessage({greeting: 'getToken'}, response => {
-    console.log(response);
+    console.log('Auth Process is called');
   });
 };
 

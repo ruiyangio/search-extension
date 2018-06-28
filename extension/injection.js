@@ -14,7 +14,7 @@ function makeRequest(query, callback) {
             callback(data);
         })
         .catch(error => {
-            console.log(error);
+            console.log('Search extension has encountered an error');
         });
     });
 }
@@ -24,17 +24,17 @@ function makeQueryUrl(query) {
     return `${baseUrl}?fields=*&q=fullText contains '${query}'`;
 }
 
-function attach() {
-    const searchBox = document.querySelector('input[placeholder="Search in SharePoint"]');
-    const searchButton = document.querySelector('button[aria-label="Search"]');
-    searchBox.addEventListener('keypress', searchHandler);
+function toNode(html) {
+    return new DOMParser().parseFromString(html, 'text/html').body.childNodes[0];
 }
 
 function makeFileBlock(file) {
     return `
     <div style="float: left; margin-right: 10px; border: 1px solid #CCCCCC; padding: 10px; box-shadow: 0 0 1px #CCCCCC;">
         <div style="margin-left: auto; margin-right: auto; display: table; margin-bottom: 10px;">
-            <img style="width: 60px; height: 45px" src="${file.thumbnailLink}" alt="Preview">
+            <a href="${file.webViewLink}">
+                <img style="width: 60px; height: 45px" src="${file.thumbnailLink}" alt="Preview">
+            </a>
         </div>
         <div>
             <img style="display: block; float: left; margin-top: 3px; margin-right: 6px;" src="${file.iconLink}" alt="Icon">
@@ -45,9 +45,9 @@ function makeFileBlock(file) {
 }
 
 function searchHandler(e) {
-    const key = e.which || e.keyCode;
-    if (key !== 13) {
-        return;
+    const driveDom = document.getElementById('drive_results');
+    if (driveDom) {
+        driveDom.remove();
     }
 
     const typeFilterDiv = document.querySelector('.SPSearchUX-module__searchFilters___s1xp2').parentElement;
@@ -59,24 +59,33 @@ function searchHandler(e) {
 
     makeRequest(searchQuery, results => {
         if (results && results.files.length > 0) {
-            const driveDom = document.getElementById('drive_results');
-            if (driveDom) {
-                driveDom.remove();
-            }
             let inner = '';
             results.files.forEach(file => {
                 const fileBlock = makeFileBlock(file);
                 inner += fileBlock;
             });
-            const cardTemplate = `<div id="drive_results" style="padding-bottom: 100px;">${inner}</div>`;
+            const cardTemplate = `
+            <div id="drive_results" style="padding-bottom: 100px;">
+                <div style="margin-bottom: 15px;">
+                    <span>Search results from:</span>
+                    <a href="https://drive.google.com/drive">Google Drive</a>
+                </div>
+                ${inner}
+            </div>`;
             const cardNode = toNode(cardTemplate);
             typeFilterDiv.appendChild(cardNode);
         }
     });
 }
 
-function toNode(html) {
-    return new DOMParser().parseFromString(html, 'text/html').body.childNodes[0];
+function attach() {
+    const searchBox = document.querySelector('input[placeholder="Search in SharePoint"]');
+    const searchButton = document.querySelector('button[aria-label="Search"]');
+    if (!searchBox || !searchButton) {
+        return;
+    }
+
+    searchButton.addEventListener('click', searchHandler);
 }
 
 attach();
