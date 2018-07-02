@@ -18,22 +18,54 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const cachedToken = result['access_token_key'];
         if (cachedToken) {
           chrome.identity.removeCachedAuthToken({token: cachedToken}, () => {
-            chrome.identity.getAuthToken({'interactive': true}, token => {
-              chrome.storage.local.set({'access_token_key': token}, () => {
-                console.log(`New Token is saved to local storage ${token}`);
-                sendResponse({farewell: 'gotToken'});
-              });
-            });
+            getAuthTokenAndSave(sendResponse);
           });
         }
         else {
-          chrome.identity.getAuthToken({ 'interactive': true }, token => {
-            chrome.storage.local.set({'access_token_key': token}, () => {
-              console.log(`Token is saved to local storage ${token}`);
-              sendResponse({farewell: 'gotToken'});
-            });
-          });
+          getAuthTokenAndSave(sendResponse);
         }
       });
     }
+    else if (request.greeting == 'getDropboxToken') {
+      const dbx = new Dropbox.Dropbox({ clientId: 'uwejgdzhrwuof2v' });
+      const authUrl = dbx.getAuthenticationUrl('https://microsoft.sharepoint.com');
+      console.log(authUrl);
+      chrome.tabs.create({ url: authUrl, active: false });
+    }
 });
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+    if (changeInfo.url) {
+      const url = new URL(changeInfo.url);
+      const token = getQueryParam(url.hash.substring(1), 'access_token');
+      if (!token || url.host !== 'microsoft.sharepoint.com') {
+        return;
+      } 
+      chrome.storage.local.set({'drop_box_access_token_key': token}, () => {
+        console.log(`Dropbox token is saved to local storage ${ token }`);
+        chrome.tabs.remove(tabId, () => {
+          console.log(`${ tabId } is closed`);
+        });
+      });
+    }
+  }
+);
+
+function getQueryParam(query, q) {
+  const parts = query.split('&');
+  for (let i = 0; i < parts.length; i++) {
+      const pair = parts[i].split('=');
+      if (decodeURIComponent(pair[0]) == q) {
+          return decodeURIComponent(pair[1]);
+      }
+  }
+}
+
+function getAuthTokenAndSave(sendResponse, interactive = true) {
+  chrome.identity.getAuthToken({ 'interactive': interactive }, token => {
+    chrome.storage.local.set({'access_token_key': token}, () => {
+      console.log(`Token is saved to local storage`);
+      sendResponse({ message: 'Token is saved' });
+    });
+  });
+}

@@ -23,12 +23,31 @@
         cursor: pointer;
         opacity: 0.6;
       }
+
+      .ext-btn.ext-btn-action {
+        background-color: #00BFA5;
+      }
+
+      .ext-spacer {
+        margin-top: 10px;
+      }
     </style>
   </head>
   <body>
     <div class="ext-main">
-        <button id="attachScript" class="ext-btn">Enable</button>
-        <button id="getToken" class="ext-btn">Auth</button>
+        <div>
+          <div>Google Drive</div>
+          <div class="ext-spacer">
+              <button id="getToken" class="ext-btn">Auth</button>
+              <button id="attachScript" class="ext-btn ext-btn-action">Enable</button>
+          </div>
+        </div>
+        <div>
+          <div class="ext-spacer">Dropbox</div>
+          <div class="ext-spacer">
+            <button id="getDropboxToken" class="ext-btn">Auth</button>
+          </div>
+        </div>
     </div>
     <script src="popup.js"></script>
   </body>
