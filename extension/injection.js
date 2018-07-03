@@ -1,8 +1,11 @@
 'use strict';
 
 function searchGoogleDrive(query, callback) {
-    chrome.storage.local.get(['access_token_key'], result => {
+    chrome.storage.local.get(['access_token_key', 'drive_enabled'], result => {
         const token = result['access_token_key'];
+        if (!result['drive_enabled']) {
+            return;
+        }
         fetch(makeQueryUrl(query), {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -22,8 +25,11 @@ function searchGoogleDrive(query, callback) {
 }
 
 function searchDropbox(query, callback) {
-    chrome.storage.local.get(['drop_box_access_token_key'], result => {
+    chrome.storage.local.get(['drop_box_access_token_key', 'dropbox_enabled'], result => {
         const token = result['drop_box_access_token_key'];
+        if (!result['dropbox_enabled']) {
+            return;
+        }
         fetch('https://api.dropboxapi.com/2/files/search', {
             headers: {
                 'Authorization': `Bearer ${token}`,

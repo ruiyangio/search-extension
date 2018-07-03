@@ -9,6 +9,10 @@ chrome.runtime.onInstalled.addListener(() => {
       actions: [new chrome.declarativeContent.ShowPageAction()]
     }]);
   });
+
+  chrome.storage.local.set({'drive_enabled': false, 'dropbox_enabled': false}, () => {
+    console.log('Google drive and Dropbox are disabled by default');
+  });
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
